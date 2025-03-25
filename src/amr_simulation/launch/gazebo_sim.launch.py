@@ -1,4 +1,5 @@
 import launch
+import launch.event_handlers
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -44,9 +45,44 @@ def generate_launch_description():
                    '-entity', robot_name_in_model, ]
     )
     
+    # 加载并激活 robot_joint_state_broadcaster 控制器
+    load_joint_state_controller = launch.actions.ExecuteProcess(
+        cmd=['ros2','control','load_controller','--set-state','active',
+             'robot_joint_state_broadcaster'],
+             output='screen'
+    )
+
+    # 加载并激活 robot_effort_controller 控制器
+    load_robot_effort_controller = launch.actions.ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'robot_effort_controller'], 
+        output='screen'
+    )
+
+    load_robot_diff_drive_controller = launch.actions.ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'robot_diff_drive_controller'], 
+        output='screen'
+    )
+
     return launch.LaunchDescription([
         action_declare_arg_mode_path,
         robot_state_publisher_node,
         launch_gazebo,
-        spawn_entity_node
+        spawn_entity_node,
+
+        # 事件动作，当加载机器人结束后执行
+        launch.actions.RegisterEventHandler(
+            event_handler=launch.event_handlers.OnProcessExit(
+                target_action=spawn_entity_node,
+                on_exit=[load_joint_state_controller],
+            )
+        ),
+
+        launch.actions.RegisterEventHandler(
+            event_handler=launch.event_handlers.OnProcessExit(
+                target_action=load_joint_state_controller,
+                on_exit=[load_robot_diff_drive_controller],
+            )
+        )
     ])

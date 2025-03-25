@@ -22,10 +22,14 @@
     <xacro:caster_xacro caster_name="back" xyz="-0.08 0.0 -0.076" />
 
     <!-- Gazebo 插件 -->
+    <!-- 两轮差速组件 -->
     <xacro:include filename="$(find amr_simulation)/urdf/plugins/gazebo_control_plugin.xacro" />
-    <xacro:gazebo_control_plugin />
+    <!-- <xacro:gazebo_control_plugin /> -->
 
     <xacro:include filename="$(find amr_simulation)/urdf/plugins/gazebo_sensor_plugin.xacro" />
     <xacro:gazebo_sensor_plugin />
+
+    <xacro:include filename="$(find amr_simulation)/urdf/robot.ros2_control.xacro" />
+    <xacro:robot_ros2_control />
 
 </robot>
