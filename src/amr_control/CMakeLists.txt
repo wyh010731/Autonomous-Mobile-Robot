@@ -11,10 +11,30 @@ find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(tf2 REQUIRED)
 
 add_executable(velocity_controller src/velocity_controller.cpp)
-ament_target_dependencies(velocity_controller rclcpp geometry_msgs sensor_msgs)
-install(TARGETS velocity_controller DESTINATION lib/${PROJECT_NAME})
+add_executable(Sensor_test src/Sensor_test.cpp)
+
+ament_target_dependencies(velocity_controller 
+  rclcpp 
+  geometry_msgs 
+  sensor_msgs
+)
+
+ament_target_dependencies(Sensor_test
+  rclcpp
+  geometry_msgs
+  sensor_msgs
+  nav_msgs
+  tf2
+)
+
+install(
+  TARGETS velocity_controller Sensor_test
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
