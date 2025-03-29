@@ -10,9 +10,9 @@ def generate_launch_description():
     robot_name_in_model = "robot"
     pkg_path = get_package_share_directory('amr_simulation')
     default_model_path = pkg_path + '/urdf/config/robot.urdf.xacro'
-    default_world_path = pkg_path + '/world/custom_room.world'
+    default_world_path = pkg_path + '/world/experiment_rooms/worlds/room4/world_dynamic.world'
     
-    # 为 Launch 声明参数
+    # 为 Launch 声明参数trew
     action_declare_arg_mode_path = launch.actions.DeclareLaunchArgument(
         name='model', default_value=str(default_model_path),
         description='URDF 的绝对路径')
